@@ -23,6 +23,9 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp',(err,db)=>{
   db.collection("Users").findOneAndUpdate({
     name:"viba"
   },{
+    $set:{
+        name:"virat"
+    },
     $inc:{
       age:5
     }

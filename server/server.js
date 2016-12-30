@@ -17,10 +17,12 @@ app.post("/todos",(req,res)=>{
 newtodo.save().then((result)=>{
   res.send(result);
 },(err)=>{
-  res.send(err);
+  res.status(400).send(err);
 });
 
 });
 app.listen(3000,()=>{
   console.log("server started");
 });
+
+module.exports={app};
