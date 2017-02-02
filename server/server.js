@@ -2,8 +2,8 @@ require('./config/config');
 var express=require('express');
 var bodyParser=require('body-parser');
 var _=require('lodash');
-
 var {ObjectID}=require('mongodb');
+
 var {mongoose}=require('./db/mongoose');
 var {Todo}=require('./models/todo');
 var {Users}=require('./models/users');
@@ -22,6 +22,7 @@ newtodo.save().then((result)=>{
   res.send(result);
 },(err)=>{
   res.status(400).send(err);
+});
 });
 
 app.get("/todos",(req,res)=>{
@@ -84,7 +85,19 @@ app.patch("/todos/:id",(req,res)=>{
 
 });
 
+app.post("/users",(req,res)=>{
+  var body=_.pick(req.body,['email','password']);
+  var newusers=new Users(body);
+
+  newusers.save().then(()=>{
+    return newusers.generateAuthToken();
+  }).then((token)=>{
+    res.header('x-auth',token).send(newusers);
+  }).catch((err)=>{
+      res.status(400).send();
+  });
 });
+
 app.listen(port,()=>{
   console.log("server started");
 });
